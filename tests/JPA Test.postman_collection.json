@@ -1,0 +1,449 @@
+{
+	"info": {
+		"_postman_id": "43fcfa43-6d4e-47e7-be01-ff21fea78832",
+		"name": "JPA Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authors",
+			"item": [
+				{
+					"name": "throwExceptionWithTransaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/authors/throwExceptionWithTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"authors",
+								"throwExceptionWithTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "throwExceptionWithTransaction Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/authors/throwRuntimeWithTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"authors",
+								"throwRuntimeWithTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "throwExceptionWithTransaction Copy Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/authors/throwExceptionWithoutTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"authors",
+								"throwExceptionWithoutTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "throwExceptionWithTransaction Copy Copy Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/authors/throwRuntimeWithoutTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"authors",
+								"throwRuntimeWithoutTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "throwExceptionWithTransaction Copy Copy Copy Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/authors/throwExceptionWithTransactionWithRollbackOn",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"authors",
+								"throwExceptionWithTransactionWithRollbackOn"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BookManager",
+			"item": [
+				{
+					"name": "createAuthorAndBook",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/createAuthorAndBook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"createAuthorAndBook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAuthorAndBookWithRuntimeException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/createAuthorAndBookWithRuntimeException",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"createAuthorAndBookWithRuntimeException"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAuthorInNewTxThrowRuntimeExceptionOnBook",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/createAuthorInNewTxThrowRuntimeExceptionOnBook",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"createAuthorInNewTxThrowRuntimeExceptionOnBook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAuthorAndBookInNewTxThrowRuntimeException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/createAuthorAndBookInNewTxThrowRuntimeException",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"createAuthorAndBookInNewTxThrowRuntimeException"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "insertAndFindInAnotherTransaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/insertAndFindInAnotherTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"insertAndFindInAnotherTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "insertAndFindInDifferentTransaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/insertAndFindInDifferentTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"insertAndFindInDifferentTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "superLongTransaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/superLongTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"superLongTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "superLongTransactionWithRequiredTx",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/superLongTransactionWithRequiredTx",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"superLongTransactionWithRequiredTx"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "superLongTransactionWithRequiredTxWithBlankRequired",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/superLongTransactionWithRequiredTxWithBlankRequired",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"superLongTransactionWithRequiredTxWithBlankRequired"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "superLongTransactionWithRequiresNewTx",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookManager/superLongTransactionWithRequiresNewTx",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookManager",
+								"superLongTransactionWithRequiresNewTx"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "insertAndFindWithoutTransaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/books/insertAndFindWithoutTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"books",
+								"insertAndFindWithoutTransaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "insertAndFindWithTransaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/books/insertAndFindWithTransaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"books",
+								"insertAndFindWithTransaction"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Isolation",
+			"item": [
+				{
+					"name": "readUnCommited",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookIsolation/readUnCommited",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookIsolation",
+								"readUnCommited"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "readCommited",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookIsolation/readCommited",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookIsolation",
+								"readCommited"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "repeatableRead",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookIsolation/repeatableRead",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookIsolation",
+								"repeatableRead"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "isoSerializable",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/bookIsolation/isoSerializable",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"bookIsolation",
+								"isoSerializable"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
