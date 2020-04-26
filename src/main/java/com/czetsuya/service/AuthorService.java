@@ -9,7 +9,10 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.czetsuya.data.Author;
 import com.czetsuya.repository.AuthorRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class AuthorService {
 
 	@Autowired
@@ -77,30 +80,30 @@ public class AuthorService {
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void createInNewTx(Author author) {
-		System.out.println(TransactionAspectSupport.currentTransactionStatus());
+		log.debug("" + TransactionAspectSupport.currentTransactionStatus());
 		create(author);
 	}
 
 	public void superLongTransaction() {
-		System.out.println("author " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("author " + TransactionAspectSupport.currentTransactionStatus());
 		bookService.superLongTransaction4();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void superLongTransactionWithRequiredTx() {
-		System.out.println("author " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("author " + TransactionAspectSupport.currentTransactionStatus());
 		bookService.superLongTransactionWithRequiredTx();
 	}
 
 	@Transactional
 	public void superLongTransactionWithRequiredTxWithBlankRequired() {
-		System.out.println("author " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("author " + TransactionAspectSupport.currentTransactionStatus());
 		bookService.superLongTransactionWithRequiredTxWithBlankRequired();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void superLongTransactionWithRequiresNewTx() {
-		System.out.println("author " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("author " + TransactionAspectSupport.currentTransactionStatus());
 		bookService.superLongTransactionWithRequiresNewTx();
 	}
 }

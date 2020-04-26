@@ -8,89 +8,101 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.czetsuya.data.Book;
 
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class BookIsolationService {
 
-	@Autowired
-	private BookService bookService;
+    @Autowired
+    private BookService bookService;
 
-	@Transactional(isolation = Isolation.READ_UNCOMMITTED)
-	public void readUnCommited() {
+    private volatile Long bookId;
 
-		System.out.println();
-		System.out.println("readUnCommited " + TransactionAspectSupport.currentTransactionStatus());
-		dirtyReads();
-		nonRepeatableReads();
-		phantomReads();
-	}
+    @Transactional(isolation = Isolation.READ_UNCOMMITTED)
+    public void readUnCommited() {
 
-	@Transactional(isolation = Isolation.READ_COMMITTED)
-	public void readCommited() {
+        log.debug("");
+        log.debug("readUnCommited " + TransactionAspectSupport.currentTransactionStatus());
+        dirtyReads();
+        nonRepeatableReads();
+        phantomReads();
+    }
 
-		System.out.println();
-		System.out.println("readCommited " + TransactionAspectSupport.currentTransactionStatus());
-		dirtyReads();
-		nonRepeatableReads();
-		phantomReads();
-	}
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void readCommited() {
 
-	@Transactional(isolation = Isolation.REPEATABLE_READ)
-	public void repeatableRead() {
+        log.debug("");
+        log.debug("readCommited ");
+        dirtyReads();
+//        nonRepeatableReads();
+//        phantomReads();
+    }
 
-		System.out.println();
-		System.out.println("repeatableRead " + TransactionAspectSupport.currentTransactionStatus());
-		dirtyReads();
-		nonRepeatableReads();
-		phantomReads();
-	}
+    public void repeatableRead() {
 
-	@Transactional(isolation = Isolation.SERIALIZABLE)
-	public void isoSerializable() {
+        log.debug("");
+        log.debug("repeatableRead " + TransactionAspectSupport.currentTransactionStatus());
+        dirtyReads();
+        nonRepeatableReads();
+        phantomReads();
+    }
 
-		System.out.println();
-		System.out.println("isoSerializable " + TransactionAspectSupport.currentTransactionStatus());
-		dirtyReads();
-		nonRepeatableReads();
-		phantomReads();
-	}
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void isoSerializable() {
 
-	private void dirtyReads() {
+        log.debug("");
+        log.debug("isoSerializable " + TransactionAspectSupport.currentTransactionStatus());
+        dirtyReads();
+        nonRepeatableReads();
+        phantomReads();
+    }
 
-		System.out.println("\r\ndirtyReads " + TransactionAspectSupport.currentTransactionStatus());
-		Book book = new Book();
-		book.setTitle("readUnCommited");
-		bookService.create(book);
+    @SneakyThrows
+    private void dirtyReads() {
 
-		System.out.println("dirtyReads " + bookService.findByIdInNewTx(book.getId()));
-	}
+        log.debug("\r\ndirtyReads ");
 
-	private void nonRepeatableReads() {
+        new Thread(() -> {
+            Book book = new Book();
+            book.setTitle("dirtyReads");
+            bookService.create(book);
+            bookId = book.getId();
+        }).start();
 
-		System.out.println("\r\nnonRepeatableReads " + TransactionAspectSupport.currentTransactionStatus());
-		Book book = new Book();
-		book.setTitle("nonRepeatableReads");
-		bookService.createInNewTx(book);
+        Thread.sleep(2000);
 
-		System.out.println("nonRepeatableReads " + bookService.findByIdInNewTx(book.getId()));
+        new Thread(() -> log.debug("dirtyReads " + bookService.findByIdInNewTx(bookId))).start();
+    }
 
-		book.setTitle("nonRepeatableReads-Updated");
+    private void nonRepeatableReads() {
 
-		System.out.println("nonRepeatableReads " + bookService.findByIdInNewTx(book.getId()));
-	}
+        log.debug("\r\nnonRepeatableReads " + TransactionAspectSupport.currentTransactionStatus());
+        Book book = new Book();
+        book.setTitle("nonRepeatableReads");
+        bookService.createInNewTx(book);
 
-	private void phantomReads() {
+        log.debug("nonRepeatableReads " + bookService.findByIdInNewTx(book.getId()));
 
-		System.out.println("\r\nphantomReads " + TransactionAspectSupport.currentTransactionStatus());
-		Book book = new Book();
-		book.setTitle("phantomReads1");
-		bookService.createInNewTx(book);
+        book.setTitle("nonRepeatableReads-Updated");
 
-		System.out.println("phantomReads " + bookService.findAllInNewTx());
+        log.debug("nonRepeatableReads " + bookService.findByIdInNewTx(book.getId()));
+    }
 
-		book = new Book();
-		book.setTitle("phantomReads2");
-		bookService.createInNewTx(book);
+    private void phantomReads() {
 
-		System.out.println("phantomReads " + bookService.findAllInNewTx());
-	}
+        log.debug("\r\nphantomReads " + TransactionAspectSupport.currentTransactionStatus());
+        Book book = new Book();
+        book.setTitle("phantomReads1");
+        bookService.createInNewTx(book);
+
+        log.debug("phantomReads " + bookService.findAllInNewTx());
+
+        book = new Book();
+        book.setTitle("phantomReads2");
+        bookService.createInNewTx(book);
+
+        log.debug("phantomReads " + bookService.findAllInNewTx());
+    }
 }

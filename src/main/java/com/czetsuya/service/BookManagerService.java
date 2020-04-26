@@ -10,7 +10,10 @@ import com.czetsuya.data.Author;
 import com.czetsuya.data.Book;
 import com.czetsuya.repository.BookRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class BookManagerService {
 
 	@Autowired
@@ -99,44 +102,44 @@ public class BookManagerService {
 
 	@Transactional
 	public void superLongTransaction() {
-		System.out.println("bm " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
 		authorService.superLongTransaction();
 	}
 
 	public void superLongTransaction2() {
-		System.out.println("bm " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
 	}
 
 	@Transactional
 	public void superLongTransactionWithRequiredTx() {
-		System.out.println("bm " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
 		authorService.superLongTransactionWithRequiredTx();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void superLongTransactionWithRequiredTx2() {
-		System.out.println("bm " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
 	}
 
 	@Transactional
 	public void superLongTransactionWithRequiredTxWithBlankRequired() {
-		System.out.println("bm " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
 		authorService.superLongTransactionWithRequiredTxWithBlankRequired();
 	}
 
 	@Transactional
 	public void superLongTransactionWithRequiredTxWithBlankRequired2() {
-		System.out.println("bm " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
 	}
 
 	@Transactional
 	public void superLongTransactionWithRequiresNewTx() {
-		System.out.println("bm " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
 		authorService.superLongTransactionWithRequiresNewTx();
 	}
 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public void superLongTransactionWithRequiresNewTx2() {
-		System.out.println("bm " + TransactionAspectSupport.currentTransactionStatus());
+		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
 	}
 }
