@@ -16,8 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class BookManagerService {
 
-	@Autowired
-	private BookService bookService;
+	//@Autowired
+	//private BookService bookService;
 
 	@Autowired
 	private AuthorService authorService;
@@ -34,7 +34,7 @@ public class BookManagerService {
 
 		Book book = new Book();
 		book.setTitle("createAuthorAndBook");
-		bookService.create(book);
+		//bookService.create(book);
 	}
 
 	@Transactional
@@ -47,7 +47,7 @@ public class BookManagerService {
 
 		Book book = new Book();
 		book.setTitle("createAuthorAndBookWithRuntimeException");
-		bookService.create(book);
+		//bookService.create(book);
 
 		throw new RuntimeException();
 	}
@@ -62,7 +62,7 @@ public class BookManagerService {
 
 		Book book = new Book();
 		book.setTitle("createAuthorInNewTxThrowRuntimeExceptionOnBook");
-		bookService.create(book);
+		//bookService.create(book);
 
 		throw new RuntimeException();
 	}
@@ -77,7 +77,7 @@ public class BookManagerService {
 
 		Book book = new Book();
 		book.setTitle("createAuthorInNewTxThrowRuntimeExceptionOnBook");
-		bookService.createInNewTx(book);
+		//bookService.createInNewTx(book);
 
 		throw new RuntimeException();
 	}
@@ -86,7 +86,7 @@ public class BookManagerService {
 
 		Book book = new Book();
 		book.setTitle("insertAndFindInAnotherTransaction");
-		bookService.createInNewTx(book);
+		//bookService.createInNewTx(book);
 
 		return bookRepository.findById(book.getId()).get();
 	}
@@ -95,9 +95,9 @@ public class BookManagerService {
 
 		Book book = new Book();
 		book.setTitle("insertAndFindInDifferentTransaction");
-		bookService.createInNewTx(book);
+		//bookService.createInNewTx(book);
 
-		return bookService.findInNewTransaction(book.getId());
+		return null;//bookService.findInNewTransaction(book.getId());
 	}
 
 	@Transactional

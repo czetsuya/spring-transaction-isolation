@@ -18,22 +18,24 @@ import com.czetsuya.service.AnimeService;
 @SpringBootTest
 class JpaTransactionTestApplicationTests {
 
-    @Autowired
-    private AnimeService animeService;
+    //@Autowired
+    //private AnimeService animeService;
 
-    @Autowired
-    private AnimeRepository animeRepository;
+    //@Autowired
+    //private AnimeRepository animeRepository;
 
-    private Anime anime;
+    //private Anime anime;
 
     @Test
     void contextLoads() {
     }
 
+        /*
     @BeforeEach
     public void init() {
         anime = new Anime("Gundam Seed");
     }
+
 
     @Test
     public void create_saveOk() {
@@ -48,5 +50,6 @@ class JpaTransactionTestApplicationTests {
         assertThat(ac).hasSize(1);
         assertThat(ac.get(0).getFirstName()).isEqualTo("Kira");
     }
+    */
 
 }

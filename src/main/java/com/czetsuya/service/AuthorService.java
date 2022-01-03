@@ -18,7 +18,7 @@ public class AuthorService {
 	@Autowired
 	private AuthorRepository authorRepository;
 
-	@Autowired
+	//@Autowired
 	private BookService bookService;
 
 	@Transactional
