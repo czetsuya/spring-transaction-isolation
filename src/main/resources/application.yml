@@ -1,0 +1,29 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  main:
+    allow-circular-references: true
+
+#spring.datasource.driverClassName=org.postgresql.Driver
+#spring.datasource.url=jdbc:postgresql://localhost:5432/library
+
+logging:
+  level:
+    root: info
+    com.czetsuyatech: debug
+    org.springframework.orm.jpa: debug
+    org.springframework.transaction: debug

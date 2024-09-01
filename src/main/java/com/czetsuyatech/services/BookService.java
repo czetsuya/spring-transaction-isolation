@@ -1,115 +1,75 @@
 package com.czetsuyatech.services;
 
+import com.czetsuyatech.persistence.entities.BookEntity;
+import com.czetsuyatech.persistence.repositories.BookRepository;
 import java.util.List;
 import java.util.Optional;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
-import com.czetsuyatech.data.Book;
-import com.czetsuyatech.persistence.repositories.BookRepository;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
+  @Autowired
+  private BookRepository bookRepository;
 
-    @Autowired
-    private BookManagerService bookManagerService;
+  @Autowired
+  private BookManagerService bookManagerService;
 
-    public void create(Book book) {
-        bookRepository.save(book);
-    }
-    
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void createInRequiredTx(Book book) {
-        log.debug("" + TransactionAspectSupport.currentTransactionStatus());
-        create(book);
-    }
+  @Autowired
+  private BookService self;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void createInNewTx(Book book) {
-        log.debug("" + TransactionAspectSupport.currentTransactionStatus());
-        create(book);
-    }
+  public void create(BookEntity bookEntity) {
+    log.debug("create");
+    bookRepository.save(bookEntity);
+  }
 
-    public Book findById(Long id) {
-        log.debug("findById " + TransactionAspectSupport.currentTransactionStatus());
-        Optional<Book> book = bookRepository.findById(id);
-        if (book.isPresent()) {
-            return book.get();
-        }
+  @Transactional(propagation = Propagation.REQUIRED)
+  public void createInTx(BookEntity bookEntity) {
+    create(bookEntity);
+  }
 
-        return null;
-    }
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public void createInAnotherTx(BookEntity bookEntity) {
+    create(bookEntity);
+  }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
-    public Book findByIdInNewTx(Long id) {
-        return findById(id);
+  public BookEntity findById(Long id) {
+
+    log.debug("findById");
+    Optional<BookEntity> book = bookRepository.findById(id);
+    if (book.isPresent()) {
+      return book.get();
     }
 
-    public List<Book> findAll() {
-        log.debug("findAll " + TransactionAspectSupport.currentTransactionStatus());
-        return bookRepository.findAll();
-    }
+    return null;
+  }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<Book> findAllInNewTx() {
-        return findAll();
-    }
+  @Transactional(propagation = Propagation.REQUIRED)
+  public BookEntity findByIdInTx(Long id) {
+    return findById(id);
+  }
 
-    public Book insertAndFindWithoutTransaction() {
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public BookEntity findByIdInAnotherTx(Long id) {
+    return findById(id);
+  }
 
-        Book book = new Book();
-        book.setTitle("insertAndFindWithoutTransaction");
-        create(book);
+  public List<BookEntity> findAll() {
+    return bookRepository.findAll();
+  }
 
-        return bookRepository.findById(book.getId()).get();
-    }
+  @Transactional(propagation = Propagation.REQUIRES_NEW)
+  public List<BookEntity> findAllInAnotherTx() {
+    return findAll();
+  }
 
-    @Transactional
-    public Book insertAndFindWithTransaction() {
-
-        Book book = new Book();
-        book.setTitle("insertAndFindWithTransaction");
-        create(book);
-
-        return bookRepository.findById(book.getId()).get();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Book findInNewTransaction(Long id) {
-        return bookRepository.findById(id).get();
-    }
-
-    public void superLongTransaction4() {
-        log.debug("book " + TransactionAspectSupport.currentTransactionStatus());
-        bookManagerService.superLongTransaction2();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void superLongTransactionWithRequiredTx() {
-        log.debug("book " + TransactionAspectSupport.currentTransactionStatus());
-        bookManagerService.superLongTransactionWithRequiredTx2();
-    }
-
-    public void superLongTransactionWithRequiredTxWithBlankRequired() {
-        log.debug("book " + TransactionAspectSupport.currentTransactionStatus());
-        bookManagerService.superLongTransactionWithRequiredTxWithBlankRequired2();
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void superLongTransactionWithRequiresNewTx() {
-        log.debug("book " + TransactionAspectSupport.currentTransactionStatus());
-        bookManagerService.superLongTransactionWithRequiresNewTx2();
-    }
-
+  public String superLongTransaction4() {
+    log.debug("book: {}", self.findById(1L));
+    return bookManagerService.superLongTransaction2();
+  }
 }

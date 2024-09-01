@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import com.czetsuyatech.data.Book;
+import com.czetsuyatech.persistence.entities.BookEntity;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -65,44 +65,44 @@ public class BookIsolationService {
         log.debug("\r\ndirtyReads ");
 
         new Thread(() -> {
-            Book book = new Book();
-            book.setTitle("dirtyReads");
-            bookService.create(book);
-            bookId = book.getId();
+            BookEntity bookEntity = new BookEntity();
+            bookEntity.setTitle("dirtyReads");
+            bookService.create(bookEntity);
+            bookId = bookEntity.getId();
         }).start();
 
         Thread.sleep(2000);
 
-        new Thread(() -> log.debug("dirtyReads " + bookService.findByIdInNewTx(bookId))).start();
+        new Thread(() -> log.debug("dirtyReads " + bookService.findByIdInAnotherTx(bookId))).start();
     }
 
     private void nonRepeatableReads() {
 
         log.debug("\r\nnonRepeatableReads " + TransactionAspectSupport.currentTransactionStatus());
-        Book book = new Book();
-        book.setTitle("nonRepeatableReads");
-        bookService.createInNewTx(book);
+        BookEntity bookEntity = new BookEntity();
+        bookEntity.setTitle("nonRepeatableReads");
+        bookService.createInAnotherTx(bookEntity);
 
-        log.debug("nonRepeatableReads " + bookService.findByIdInNewTx(book.getId()));
+        log.debug("nonRepeatableReads " + bookService.findByIdInAnotherTx(bookEntity.getId()));
 
-        book.setTitle("nonRepeatableReads-Updated");
+        bookEntity.setTitle("nonRepeatableReads-Updated");
 
-        log.debug("nonRepeatableReads " + bookService.findByIdInNewTx(book.getId()));
+        log.debug("nonRepeatableReads " + bookService.findByIdInAnotherTx(bookEntity.getId()));
     }
 
     private void phantomReads() {
 
         log.debug("\r\nphantomReads " + TransactionAspectSupport.currentTransactionStatus());
-        Book book = new Book();
-        book.setTitle("phantomReads1");
-        bookService.createInNewTx(book);
+        BookEntity bookEntity = new BookEntity();
+        bookEntity.setTitle("phantomReads1");
+        bookService.createInAnotherTx(bookEntity);
 
-        log.debug("phantomReads " + bookService.findAllInNewTx());
+        log.debug("phantomReads " + bookService.findAllInAnotherTx());
 
-        book = new Book();
-        book.setTitle("phantomReads2");
-        bookService.createInNewTx(book);
+        bookEntity = new BookEntity();
+        bookEntity.setTitle("phantomReads2");
+        bookService.createInAnotherTx(bookEntity);
 
-        log.debug("phantomReads " + bookService.findAllInNewTx());
+        log.debug("phantomReads " + bookService.findAllInAnotherTx());
     }
 }

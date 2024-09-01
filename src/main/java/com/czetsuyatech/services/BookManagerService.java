@@ -1,145 +1,62 @@
 package com.czetsuyatech.services;
 
+import com.czetsuyatech.persistence.entities.BookEntity;
+import com.czetsuyatech.services.fixtures.BookFixture;
+import java.time.Instant;
+import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
-import com.czetsuyatech.data.Author;
-import com.czetsuyatech.data.Book;
-import com.czetsuyatech.persistence.repositories.BookRepository;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class BookManagerService {
 
-	@Autowired
-	private BookService bookService;
+  @Autowired
+  private BookService bookService;
 
-	@Autowired
-	private AuthorService authorService;
+  @Autowired
+  private AuthorService authorService;
 
-	@Autowired
-	private BookRepository bookRepository;
+  @Transactional
+  public Optional<BookEntity> createAndFindInSameTx() {
 
-	public void createAuthorAndBook() {
+    log.debug("start createAndFindInSameTx");
 
-		Author author = new Author();
-		author.setFirstName("createAuthorAndBook");
-		author.setLastName("createAuthorAndBook");
-		authorService.create(author);
+    var input = BookFixture.createBook("HP", "Harry Potter", Instant.now());
+    bookService.create(input);
 
-		Book book = new Book();
-		book.setTitle("createAuthorAndBook");
-		bookService.create(book);
-	}
+    var output = Optional.ofNullable(bookService.findById(input.getId()));
 
-	@Transactional
-	public void createAuthorAndBookWithRuntimeException() {
+    log.debug("end createAndFindInSameTx");
 
-		Author author = new Author();
-		author.setFirstName("createAuthorAndBookWithRuntimeException");
-		author.setLastName("createAuthorAndBookWithRuntimeException");
-		authorService.create(author);
+    return output;
+  }
 
-		Book book = new Book();
-		book.setTitle("createAuthorAndBookWithRuntimeException");
-		bookService.create(book);
+  public Optional<BookEntity> createAndFindInAnotherTx() {
 
-		throw new RuntimeException();
-	}
+    log.debug("start createAndFindInSameTx");
 
-	@Transactional
-	public void createAuthorInNewTxThrowRuntimeExceptionOnBook() {
+    var input = BookFixture.createBook("HP", "Harry Potter", Instant.now());
+    bookService.createInTx(input);
 
-		Author author = new Author();
-		author.setFirstName("createAuthorInNewTxThrowRuntimeExceptionOnBook");
-		author.setLastName("createAuthorInNewTxThrowRuntimeExceptionOnBook");
-		authorService.createInNewTx(author);
+    var output = Optional.ofNullable(bookService.findByIdInAnotherTx(input.getId()));
 
-		Book book = new Book();
-		book.setTitle("createAuthorInNewTxThrowRuntimeExceptionOnBook");
-		bookService.create(book);
+    log.debug("end createAndFindInSameTx");
 
-		throw new RuntimeException();
-	}
+    return output;
+  }
 
-	@Transactional
-	public void createAuthorAndBookInNewTxThrowRuntimeException() {
+  @Transactional
+  public String superLongTransaction() {
+    bookService.create(BookFixture.createDefaultBook());
+    return authorService.superLongTransaction();
+  }
 
-		Author author = new Author();
-		author.setFirstName("createAuthorInNewTxThrowRuntimeExceptionOnBook");
-		author.setLastName("createAuthorInNewTxThrowRuntimeExceptionOnBook");
-		authorService.createInNewTx(author);
-
-		Book book = new Book();
-		book.setTitle("createAuthorInNewTxThrowRuntimeExceptionOnBook");
-		bookService.createInNewTx(book);
-
-		throw new RuntimeException();
-	}
-
-	public Book insertAndFindInAnotherTransaction() {
-
-		Book book = new Book();
-		book.setTitle("insertAndFindInAnotherTransaction");
-		bookService.createInNewTx(book);
-
-		return bookRepository.findById(book.getId()).get();
-	}
-
-	public Book insertAndFindInDifferentTransaction() {
-
-		Book book = new Book();
-		book.setTitle("insertAndFindInDifferentTransaction");
-		bookService.createInNewTx(book);
-
-		return bookService.findInNewTransaction(book.getId());
-	}
-
-	@Transactional
-	public void superLongTransaction() {
-		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
-		authorService.superLongTransaction();
-	}
-
-	public void superLongTransaction2() {
-		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
-	}
-
-	@Transactional
-	public void superLongTransactionWithRequiredTx() {
-		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
-		authorService.superLongTransactionWithRequiredTx();
-	}
-
-	@Transactional(propagation = Propagation.REQUIRED)
-	public void superLongTransactionWithRequiredTx2() {
-		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
-	}
-
-	@Transactional
-	public void superLongTransactionWithRequiredTxWithBlankRequired() {
-		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
-		authorService.superLongTransactionWithRequiredTxWithBlankRequired();
-	}
-
-	@Transactional
-	public void superLongTransactionWithRequiredTxWithBlankRequired2() {
-		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
-	}
-
-	@Transactional
-	public void superLongTransactionWithRequiresNewTx() {
-		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
-		authorService.superLongTransactionWithRequiresNewTx();
-	}
-
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void superLongTransactionWithRequiresNewTx2() {
-		log.debug("bm " + TransactionAspectSupport.currentTransactionStatus());
-	}
+  public String superLongTransaction2() {
+    log.debug("book: {}", bookService.findById(1L));
+    return TransactionAspectSupport.currentTransactionStatus().getTransactionName();
+  }
 }
